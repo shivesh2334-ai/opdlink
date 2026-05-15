@@ -5,6 +5,8 @@ export const CENTRE_TYPE_LABELS: Record<CentreType, string> = {
   polyclinic: 'Polyclinic',
   opd_nursing_home: 'OPD at Nursing Home',
   hospital_opd: 'Hospital OPD',
+  remote_clinic: 'Remote Clinic (Monthly)',
+  health_camp: 'Health Camp',
 };
 
 export const CENTRE_TYPE_DESCRIPTIONS: Record<CentreType, string> = {
@@ -12,6 +14,8 @@ export const CENTRE_TYPE_DESCRIPTIONS: Record<CentreType, string> = {
   polyclinic: 'Multi-specialty facility with shared infrastructure',
   opd_nursing_home: 'OPD space within an operational nursing home',
   hospital_opd: 'Outpatient department within a registered hospital',
+  remote_clinic: 'Monthly remote consultation clinic via telemedicine platform',
+  health_camp: 'Community health camps with scheduled outreach visits',
 };
 
 export const DAYS_OF_WEEK: DayOfWeek[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -54,6 +58,13 @@ export const RENTAL_LABELS = {
   hourly: 'Per Hour',
   daily: 'Per Day (Session)',
   monthly: 'Monthly',
+};
+
+export const CAMP_FREQUENCY_LABELS = {
+  weekly: 'Weekly',
+  biweekly: 'Bi-weekly',
+  monthly: 'Monthly',
+  quarterly: 'Quarterly',
 };
 
 export const SCORE_TIERS = {
@@ -142,5 +153,55 @@ export const DEMO_CENTRES = [
     verified: true,
     createdAt: new Date().toISOString(),
     description: 'Modern single-specialty clinic with fully equipped consultation room.',
+  },
+  {
+    id: 'demo-c4',
+    name: 'TeleMed Remote Clinic Network',
+    type: 'remote_clinic' as CentreType,
+    address: 'Virtual Platform',
+    city: 'Pan-India',
+    pincode: '000000',
+    state: 'Delhi',
+    specialitiesAvailable: ['Cardiology', 'Diabetology', 'General Medicine', 'Internal Medicine'],
+    rentalModel: ['monthly'] as any,
+    monthlyRate: 15000,
+    availableDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] as DayOfWeek[],
+    availableTimings: [{ start: '14:00', end: '18:00' }],
+    totalRooms: 0,
+    facilities: ['WiFi', 'EMR System'],
+    contactName: 'Amit Verma',
+    contactPhone: '9999988888',
+    contactEmail: 'support@telemedclinic.in',
+    registrationNo: 'DH-2023-8892',
+    verified: true,
+    createdAt: new Date().toISOString(),
+    description: 'Monthly telemedicine remote consultation clinic for specialised care access across India.',
+    isRemote: true,
+    isMonthlyClinc: true,
+  },
+  {
+    id: 'demo-c5',
+    name: 'NGO Community Health Camp Initiative',
+    type: 'health_camp' as CentreType,
+    address: 'Multiple Community Centers',
+    city: 'New Delhi & NCR',
+    pincode: '110001',
+    state: 'Delhi',
+    specialitiesAvailable: ['General Medicine', 'Paediatrics', 'Gynaecology & Obstetrics', 'Ophthalmology'],
+    rentalModel: ['monthly'] as any,
+    monthlyRate: 8000,
+    availableDays: ['Sat', 'Sun'] as DayOfWeek[],
+    availableTimings: [{ start: '09:00', end: '13:00' }],
+    totalRooms: 0,
+    facilities: ['Mobile Setup', 'Basic Diagnostics'],
+    contactName: 'Dr. Deepa Singh',
+    contactPhone: '9876543218',
+    contactEmail: 'deepa@communityhealth.org',
+    verified: true,
+    createdAt: new Date().toISOString(),
+    description: 'Community outreach health camps with focus on preventive care and awareness in underserved areas.',
+    isHealthCamp: true,
+    campFrequency: 'weekly',
+    campLocations: ['Dwarka Community Center', 'Rohini Market Square', 'Sector 8 Civic Center'],
   },
 ];
