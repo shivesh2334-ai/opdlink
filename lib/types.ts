@@ -1,4 +1,4 @@
-export type CentreType = 'single_clinic' | 'polyclinic' | 'opd_nursing_home' | 'hospital_opd';
+export type CentreType = 'single_clinic' | 'polyclinic' | 'opd_nursing_home' | 'hospital_opd' | 'remote_clinic' | 'health_camp';
 export type RentalPeriod = 'hourly' | 'daily' | 'monthly';
 export type DayOfWeek = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 
@@ -31,6 +31,11 @@ export interface HealthcareCentre {
   verified: boolean;
   createdAt: string;
   description?: string;
+  isRemote?: boolean;
+  isMonthlyClinc?: boolean;
+  isHealthCamp?: boolean;
+  campFrequency?: string; // e.g., "weekly", "bi-weekly", "monthly"
+  campLocations?: string[];
 }
 
 export interface Doctor {
@@ -55,6 +60,8 @@ export interface Doctor {
   verified: boolean;
   createdAt: string;
   bio?: string;
+  openToRemote?: boolean;
+  openToHealthCamps?: boolean;
 }
 
 export interface MatchBreakdown {
