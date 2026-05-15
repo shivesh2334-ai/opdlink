@@ -6,7 +6,7 @@ import { saveCentre, generateId } from '@/lib/storage';
 import type { HealthcareCentre, CentreType, RentalPeriod, DayOfWeek } from '@/lib/types';
 import {
   CENTRE_TYPE_LABELS, DAYS_OF_WEEK, SPECIALITIES,
-  FACILITIES, INDIAN_STATES,
+  FACILITIES, INDIAN_STATES, CAMP_FREQUENCY_LABELS,
 } from '@/lib/constants';
 import { CheckCircle2, Building2 } from 'lucide-react';
 
@@ -73,6 +73,8 @@ export default function RegisterCentrePage() {
     specialitiesAvailable: [] as string[],
     facilities: [] as string[],
     contactName: '', contactPhone: '', contactEmail: '',
+    isRemote: false, isMonthlyClinc: false, isHealthCamp: false,
+    campFrequency: 'monthly', campLocations: '',
   });
 
   const update = (k: string, v: unknown) => setForm(f => ({ ...f, [k]: v }));
@@ -106,6 +108,11 @@ export default function RegisterCentrePage() {
       contactEmail: form.contactEmail,
       verified: false,
       createdAt: new Date().toISOString(),
+      isRemote: form.isRemote,
+      isMonthlyClinc: form.isMonthlyClinc,
+      isHealthCamp: form.isHealthCamp,
+      campFrequency: form.isHealthCamp ? form.campFrequency : undefined,
+      campLocations: form.isHealthCamp && form.campLocations ? form.campLocations.split(',').map(l => l.trim()) : undefined,
     };
     saveCentre(centre);
     setSuccess(true);
@@ -125,6 +132,9 @@ export default function RegisterCentrePage() {
       </div>
     );
   }
+
+  const isRemoteType = form.type === 'remote_clinic';
+  const isHealthCampType = form.type === 'health_camp';
 
   return (
     <div className="min-h-screen bg-cream">
@@ -173,26 +183,40 @@ export default function RegisterCentrePage() {
                   ))}
                 </div>
               </div>
-              <div>
-                <Label req>Address</Label>
-                <Input placeholder="Flat/Plot, Street, Locality" value={form.address} onChange={e => update('address', e.target.value)} />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-1">
-                  <Label req>City</Label>
-                  <Input placeholder="New Delhi" value={form.city} onChange={e => update('city', e.target.value)} />
+              {!isRemoteType && !isHealthCampType && (
+                <>
+                  <div>
+                    <Label req>Address</Label>
+                    <Input placeholder="Flat/Plot, Street, Locality" value={form.address} onChange={e => update('address', e.target.value)} />
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="col-span-1">
+                      <Label req>City</Label>
+                      <Input placeholder="New Delhi" value={form.city} onChange={e => update('city', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label req>Pincode</Label>
+                      <Input placeholder="110001" maxLength={6} value={form.pincode} onChange={e => update('pincode', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label req>State</Label>
+                      <Select value={form.state} onChange={e => update('state', e.target.value)}>
+                        {INDIAN_STATES.map(s => <option key={s}>{s}</option>)}
+                      </Select>
+                    </div>
+                  </div>
+                </>
+              )}
+              {isRemoteType && (
+                <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
+                  <p className="text-xs text-blue-800">Remote clinics operate via telemedicine. Address and pincode are not required.</p>
                 </div>
-                <div>
-                  <Label req>Pincode</Label>
-                  <Input placeholder="110001" maxLength={6} value={form.pincode} onChange={e => update('pincode', e.target.value)} />
+              )}
+              {isHealthCampType && (
+                <div className="p-4 rounded-xl bg-green-50 border border-green-200">
+                  <p className="text-xs text-green-800">Health camps operate at multiple community locations. Main office details can be provided.</p>
                 </div>
-                <div>
-                  <Label req>State</Label>
-                  <Select value={form.state} onChange={e => update('state', e.target.value)}>
-                    {INDIAN_STATES.map(s => <option key={s}>{s}</option>)}
-                  </Select>
-                </div>
-              </div>
+              )}
               <div>
                 <Label>Registration Number</Label>
                 <Input placeholder="e.g. DH-2021-4521" value={form.registrationNo} onChange={e => update('registrationNo', e.target.value)} />
@@ -213,10 +237,12 @@ export default function RegisterCentrePage() {
           {/* Step 1: Space & Rates */}
           {step === 1 && (
             <div className="space-y-5">
-              <div>
-                <Label req>Total OPD Rooms Available</Label>
-                <Input type="number" min={1} max={50} value={form.totalRooms} onChange={e => update('totalRooms', Number(e.target.value))} />
-              </div>
+              {!isRemoteType && !isHealthCampType && (
+                <div>
+                  <Label req>Total OPD Rooms Available</Label>
+                  <Input type="number" min={1} max={50} value={form.totalRooms} onChange={e => update('totalRooms', Number(e.target.value))} />
+                </div>
+              )}
               <div>
                 <Label req>Rental Models Offered</Label>
                 <div className="flex gap-3">
@@ -224,12 +250,21 @@ export default function RegisterCentrePage() {
                     <button
                       key={r}
                       type="button"
-                      onClick={() => update('rentalModel', toggleArr(form.rentalModel, r))}
+                      onClick={() => {
+                        if (isRemoteType || isHealthCampType) {
+                          if (r === 'monthly') {
+                            update('rentalModel', [r]);
+                          }
+                        } else {
+                          update('rentalModel', toggleArr(form.rentalModel, r));
+                        }
+                      }}
+                      disabled={isRemoteType || isHealthCampType ? r !== 'monthly' : false}
                       className={`flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold capitalize transition-all ${
                         form.rentalModel.includes(r)
                           ? 'border-forest-600 bg-forest-50 text-forest-800'
                           : 'border-gray-200 text-gray-500 hover:border-forest-300'
-                      }`}
+                      } ${(isRemoteType || isHealthCampType) && r !== 'monthly' ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {r}
                     </button>
@@ -251,7 +286,7 @@ export default function RegisterCentrePage() {
               {form.rentalModel.includes('monthly') && (
                 <div>
                   <Label>Monthly Rate (₹)</Label>
-                  <Input type="number" placeholder="e.g. 30000" value={form.monthlyRate} onChange={e => update('monthlyRate', e.target.value)} />
+                  <Input type="number" placeholder={isRemoteType ? "e.g. 15000" : isHealthCampType ? "e.g. 8000" : "e.g. 30000"} value={form.monthlyRate} onChange={e => update('monthlyRate', e.target.value)} />
                 </div>
               )}
               <div>
@@ -308,6 +343,22 @@ export default function RegisterCentrePage() {
                   </div>
                 </div>
               </div>
+              {isHealthCampType && (
+                <div>
+                  <Label>Camp Frequency</Label>
+                  <Select value={form.campFrequency} onChange={e => update('campFrequency', e.target.value)}>
+                    {Object.entries(CAMP_FREQUENCY_LABELS).map(([key, label]) => (
+                      <option key={key} value={key}>{label}</option>
+                    ))}
+                  </Select>
+                </div>
+              )}
+              {isHealthCampType && (
+                <div>
+                  <Label>Camp Locations (comma-separated)</Label>
+                  <Input placeholder="e.g. Sector 8, Dwarka Market, Rohini Square" value={form.campLocations} onChange={e => update('campLocations', e.target.value)} />
+                </div>
+              )}
             </div>
           )}
 
