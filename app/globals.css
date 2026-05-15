@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Crimson Pro';
+  --font-body: 'Nunito';
+  --c-primary: #1a6b42;
+  --c-accent: #e05c1a;
+  --c-gold: #f0b429;
+  --c-cream: #F8F5F0;
+  --c-ink: #0F1E17;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  background-color: var(--c-cream);
+  color: var(--c-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Score ring animation */
+.score-ring-fill {
+  stroke-dasharray: 251;
+  stroke-dashoffset: 251;
+  animation: scoreFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes scoreFill {
+  to { stroke-dashoffset: var(--target-offset); }
+}
+
+/* Stagger fade-up for cards */
+.stagger-card {
+  opacity: 0;
+  animation: fadeUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-card:nth-child(1) { animation-delay: 0.05s; }
+.stagger-card:nth-child(2) { animation-delay: 0.10s; }
+.stagger-card:nth-child(3) { animation-delay: 0.15s; }
+.stagger-card:nth-child(4) { animation-delay: 0.20s; }
+.stagger-card:nth-child(5) { animation-delay: 0.25s; }
+.stagger-card:nth-child(6) { animation-delay: 0.30s; }
+
+/* Shimmer effect for loading */
+.shimmer {
+  background: linear-gradient(90deg, #e8e2d9 25%, #f5f0eb 50%, #e8e2d9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #bbb8b2; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #999690; }
+
+/* Input focus ring */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 107, 66, 0.2);
+}
+
+/* Badge pill */
+.badge {
+  @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+}
+
+/* Day toggle button */
+.day-btn {
+  @apply w-10 h-10 rounded-full border-2 text-sm font-bold transition-all duration-200 flex items-center justify-center;
+}
+.day-btn.selected {
+  @apply bg-forest-700 border-forest-700 text-white;
+}
+.day-btn:not(.selected) {
+  @apply border-gray-300 text-gray-500 hover:border-forest-500 hover:text-forest-700;
+}
