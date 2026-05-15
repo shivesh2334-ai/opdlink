@@ -2,7 +2,7 @@
 
 **India's OPD Space Marketplace** — connecting verified doctors with healthcare centres using AI-powered matching.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/opdlink&env=ANTHROPIC_API_KEY&envDescription=Required%20for%20AI%20match%20summaries&project-name=opdlink&repository-name=opdlink)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/opdlink&env=ANTHROPIC_API_KEY&envDescription=Required%20for%20AI%20ma[...]
 
 ---
 
@@ -12,7 +12,7 @@ OPDLink solves a real friction point in Indian healthcare: **doctors who want OP
 
 | Role | What they do |
 |------|-------------|
-| **Healthcare Centre** | Register their facility (single clinic, polyclinic, nursing home OPD, hospital OPD) with rental model, available days/timings, and supported specialties |
+| **Healthcare Centre** | Register their facility (single clinic, polyclinic, nursing home OPD, hospital OPD, remote clinic, health camp) with rental model, available days/timings, and supported specialties |
 | **Doctor** | Register their specialty, required days/timings, and rent budget |
 | **Platform** | Runs a weighted scoring algorithm and generates AI summaries of top matches |
 
@@ -62,12 +62,14 @@ Top 3 matches per search get a 2-sentence plain-English summary via the Anthropi
 | **Polyclinic** | Multi-specialty facility with shared infrastructure |
 | **OPD at Nursing Home** | OPD space within an operational nursing home |
 | **Hospital OPD** | Outpatient department within a registered hospital |
+| **Remote Clinic (Monthly)** | Monthly remote consultation clinic via telemedicine platform |
+| **Health Camp** | Community health camps with scheduled outreach visits |
 
 ## Rental Models
 
 - **Hourly** — flexible, per-hour billing
 - **Daily / Session** — per OPD session
-- **Monthly** — fixed monthly tenancy
+- **Monthly** — fixed monthly tenancy (including remote clinics and health camps)
 
 ---
 
@@ -83,7 +85,7 @@ Top 3 matches per search get a 2-sentence plain-English summary via the Anthropi
 | Deployment | Vercel (Mumbai `bom1` region) |
 | CI | GitHub Actions |
 
-> **Storage note**: This MVP uses `localStorage` — data is per-browser. For a production system, replace `lib/storage.ts` with a Supabase/PostgreSQL backend while keeping the matching algorithm identical.
+> **Storage note**: This MVP uses `localStorage` — data is per-browser. For a production system, replace `lib/storage.ts` with a Supabase/PostgreSQL backend while keeping the matching algorithm [...]
 
 ---
 
@@ -162,6 +164,8 @@ Or click the one-click deploy button at the top of this README.
 - [ ] Admin dashboard with verification queue
 - [ ] SMS/WhatsApp notifications on new matches
 - [ ] Mobile app (React Native)
+- [x] Remote monthly clinic support
+- [x] Health camp integration
 
 ---
 
