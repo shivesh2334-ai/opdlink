@@ -65,27 +65,6 @@ export interface Doctor {
   openToHealthCamps?: boolean;
 }
 
-export interface Booking {
-  id: string;
-  doctorId: string;
-  centreId: string;
-  matchId?: string; // Optional reference to the match result
-  status: BookingStatus;
-  rentalPeriod: RentalPeriod;
-  amount: number; // Booking amount in INR
-  startDate: string; // ISO date "YYYY-MM-DD"
-  endDate?: string; // ISO date "YYYY-MM-DD" (for limited bookings)
-  requiredDays: DayOfWeek[];
-  timingStart: string; // "09:00"
-  timingEnd: string; // "17:00"
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-  confirmedAt?: string;
-  cancelledAt?: string;
-  reason?: string; // Cancellation/rejection reason
-}
-
 export interface MatchBreakdown {
   specialty: number;    // 0-35
   daysOverlap: number; // 0-25
@@ -103,4 +82,20 @@ export interface MatchResult {
   timingOverlapHours: number;
   rentDifference: number; // positive = centre is more expensive
   aiSummary?: string;
+}
+
+export interface Booking {
+  id: string;
+  doctorId: string;
+  centreId: string;
+  matchId?: string; // reference to the match that led to this booking
+  status: BookingStatus;
+  bookedDate: string; // ISO format date when booking was made
+  startDate: string; // ISO format date when OPD space starts
+  endDate?: string; // ISO format date when OPD space ends (for time-bound bookings)
+  rentalPeriod: RentalPeriod;
+  totalCost?: number; // calculated cost based on rental period
+  notes?: string; // any special notes or requirements
+  createdAt: string;
+  updatedAt: string;
 }
