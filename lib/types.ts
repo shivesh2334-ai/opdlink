@@ -1,6 +1,7 @@
 export type CentreType = 'single_clinic' | 'polyclinic' | 'opd_nursing_home' | 'hospital_opd' | 'remote_clinic' | 'health_camp';
 export type RentalPeriod = 'hourly' | 'daily' | 'monthly';
 export type DayOfWeek = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
 
 export interface TimeSlot {
   start: string; // "09:00"
@@ -62,6 +63,27 @@ export interface Doctor {
   bio?: string;
   openToRemote?: boolean;
   openToHealthCamps?: boolean;
+}
+
+export interface Booking {
+  id: string;
+  doctorId: string;
+  centreId: string;
+  matchId?: string; // Optional reference to the match result
+  status: BookingStatus;
+  rentalPeriod: RentalPeriod;
+  amount: number; // Booking amount in INR
+  startDate: string; // ISO date "YYYY-MM-DD"
+  endDate?: string; // ISO date "YYYY-MM-DD" (for limited bookings)
+  requiredDays: DayOfWeek[];
+  timingStart: string; // "09:00"
+  timingEnd: string; // "17:00"
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+  confirmedAt?: string;
+  cancelledAt?: string;
+  reason?: string; // Cancellation/rejection reason
 }
 
 export interface MatchBreakdown {
